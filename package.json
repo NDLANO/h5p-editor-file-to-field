@@ -1,0 +1,37 @@
+{
+  "name": "h5p-editor-csv-to-text",
+  "version": "1.0.0",
+  "main": "h5p-editor-csv-to-text.js",
+  "scripts": {
+    "start": "vite build --mode=development --watch --minify=false",
+    "build": "tsc --noEmit && vite build",
+    "lint": "prettier .",
+    "lint:fix": "prettier . --write",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NDLANO/h5p-editor-csv-to-text.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NDLANO/h5p-editor-csv-to-text/issues"
+  },
+  "homepage": "https://github.com/NDLANO/h5p-editor-csv-to-text#readme",
+  "dependencies": {
+    "h5p-utils": "^3.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/strictest": "^1.0.1",
+    "h5p-types": "^1.1.0",
+    "prettier": "^2.7.1",
+    "prettier-config": "github:boyum/prettier-config",
+    "typescript": "^4.7.4",
+    "vite": "3.0.9",
+    "vitest": "^0.27.1"
+  },
+  "prettier": "prettier-config"
+}

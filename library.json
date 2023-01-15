@@ -1,0 +1,13 @@
+{
+  "title": "CSV to text Widget",
+  "machineName": "H5PEditor.CSVToText",
+  "majorVersion": 1,
+  "minorVersion": 0,
+  "patchVersion": 10,
+  "runnable": 0,
+  "preloadedJs": [
+    {
+      "path": "h5p-editor-csv-to-text.js"
+    }
+  ]
+}

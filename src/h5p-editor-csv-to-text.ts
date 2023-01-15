@@ -2,12 +2,18 @@ import type { H5PFieldText, IH5PWidget } from "h5p-types";
 import { H5P, H5PEditor, H5PWidget, registerWidget } from "h5p-utils";
 import { parseCSV } from "./utils/csv.utils";
 
+const html = String.raw;
+
 const widgetName = "csv-to-text";
 
 const wordHintSeparator = ":";
 const languageSeparator = "|";
 
 class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
+  public $item: JQuery<HTMLElement> | undefined;
+  public $input: JQuery<HTMLTextAreaElement> | undefined;
+  public $errors: JQuery<HTMLElement> | undefined;
+
   private textarea: HTMLTextAreaElement | undefined;
 
   appendTo($container: JQuery<HTMLDivElement>) {
@@ -32,9 +38,40 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       },
     );
 
-    // TODO: Add label, description and important message (get from HTML widget)
-    $container.get(0)?.appendChild(fileInputElement);
-    $container.get(0)?.appendChild(this.textarea);
+    if (this.field.important) {
+      const importantDescription = H5PEditor.createImportantDescription(
+        this.field.important,
+      );
+
+      this.wrapper.innerHTML += importantDescription;
+    }
+
+    const label = H5PEditor.createLabel(field);
+    this.wrapper.innerHTML += label;
+
+    const description = field.description
+      ? html`<div
+          class="h5peditor-field-description"
+          id="field-description-${this.textarea.id}-description"
+        >
+          ${field.description}
+        </div>`
+      : null;
+
+    if (description) {
+      this.wrapper.innerHTML += description;
+    }
+
+    this.wrapper.appendChild(fileInputElement);
+    this.wrapper.appendChild(this.textarea);
+
+    $container.get(0)?.append(this.wrapper);
+
+    this.$item = H5PEditor.$(this.wrapper);
+    this.$input = H5PEditor.$(this.textarea);
+    this.$errors = this.$item.children(".h5p-errors");
+
+    H5PEditor.bindImportantDescriptionEvents(this, field.name, this.parent);
   }
 
   validate() {

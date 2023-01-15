@@ -2,8 +2,6 @@ import type { H5PFieldText, IH5PWidget } from "h5p-types";
 import { H5P, H5PEditor, H5PWidget, registerWidget } from "h5p-utils";
 import { parseCSV } from "./utils/csv.utils";
 
-const html = String.raw;
-
 const widgetName = "csv-to-text";
 
 const wordHintSeparator = ":";
@@ -22,23 +20,21 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       );
     }
 
-    const fileInputElement = CSVToTextWidget.createFileInput(
-      this.insertIntoField,
+    const fileInputElement = CSVToTextWidget.createFileInput(event =>
+      this.insertIntoField(event),
     );
-    this.insertFieldElement(fileInputElement);
 
     this.textarea = CSVToTextWidget.createTextarea(
       this.params ?? "",
       ({ target }) => {
         const { value } = target as HTMLTextAreaElement;
-
         this.setValue(this.field, value);
       },
     );
 
-    this.insertFieldElement(this.textarea);
-
-    $container.append(H5P.jQuery(this.wrapper));
+    // TODO: Add label, description and important message (get from HTML widget)
+    $container.get(0)?.appendChild(fileInputElement);
+    $container.get(0)?.appendChild(this.textarea);
   }
 
   validate() {
@@ -58,6 +54,17 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     fileInputElement.multiple = true;
     fileInputElement.addEventListener("change", eventListener);
 
+    fileInputElement.style.display = "inline-block";
+    fileInputElement.style.cursor = "pointer";
+    fileInputElement.style.padding = "0.5em 1.5em 0.5em 3em";
+    fileInputElement.style.background =
+      "linear-gradient(to bottom, #fbfbfb 0, #f2f2f2 100%)";
+    fileInputElement.style.border = "1px solid #d0d0d1";
+    fileInputElement.style.borderRadius = "0.25em";
+    fileInputElement.style.color = "#222222";
+    fileInputElement.style.fontWeight = "bold";
+    fileInputElement.style.lineHeight = "normal";
+
     return fileInputElement;
   }
 
@@ -75,22 +82,6 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     return textarea;
   }
 
-  private insertFieldElement(element: HTMLElement): void {
-    const inputId = element.id;
-    const containerId = `container_${inputId}`;
-
-    const fileInputMarkup = H5PEditor.createFieldMarkup(
-      this.field,
-      html`<div id="${containerId}"></div>`,
-      inputId,
-    );
-
-    this.wrapper.innerHTML = fileInputMarkup;
-
-    const inputContainer = this.wrapper.querySelector(`#${containerId}`);
-    inputContainer?.appendChild(element);
-  }
-
   private async insertIntoField(event: Event): Promise<void> {
     const files = Array.from((event.target as HTMLInputElement).files ?? []);
 
@@ -98,15 +89,21 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       return;
     }
 
-    const newValue =
+    const newValue = (
       this.textarea.value +
+      "\n" +
       (
-        await Promise.allSettled(
+        await Promise.all(
           files.map(async file =>
-            parseCSV(await file.text(), wordHintSeparator, languageSeparator),
+            parseCSV(
+              await file.text(),
+              wordHintSeparator,
+              languageSeparator,
+            ).join("\n"),
           ),
         )
-      ).join("\n");
+      ).join("\n")
+    ).trim();
 
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);

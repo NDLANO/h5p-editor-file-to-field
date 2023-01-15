@@ -91,6 +91,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     fileInputElement.multiple = true;
     fileInputElement.addEventListener("change", eventListener);
 
+    // TODO: Move CSS into a separate CSS file
     fileInputElement.style.display = "inline-block";
     fileInputElement.style.cursor = "pointer";
     fileInputElement.style.padding = "0.5em 1.5em 0.5em 3em";

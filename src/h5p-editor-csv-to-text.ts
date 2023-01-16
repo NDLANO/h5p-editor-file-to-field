@@ -27,8 +27,10 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       );
     }
 
+    const fileInputElementValue = CSVToTextWidget.createFileInputValue();
+    
     const fileInputElement = CSVToTextWidget.createFileInput(event =>
-      this.insertIntoField(event),
+      this.insertIntoField(event, fileInputElementValue),
     );
 
     this.textarea = CSVToTextWidget.createTextarea(
@@ -41,8 +43,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     const label = H5PEditor.createLabel(field);
     this.wrapper.innerHTML += label;
-    this.wrapper.classList.add("field");
-    this.wrapper.classList.add("field-name-textField");
+    this.wrapper.classList.add("field", `field-name-${field.name}`);
 
     if (this.field.important) {
       const importantDescription = H5PEditor.createImportantDescription(
@@ -66,6 +67,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     }
 
     this.wrapper.appendChild(fileInputElement);
+    this.wrapper.appendChild(fileInputElementValue);
     this.wrapper.appendChild(this.textarea);
 
     $container.get(0)?.append(this.wrapper);
@@ -83,8 +85,14 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
   remove() {}
 
+  private static createFileInputValue(): HTMLDivElement {
+    const fileInputValue = document.createElement("div");
+    fileInputValue.classList.add("csvtotext-value");
+    return fileInputValue;
+  }
+
   private static createFileInput(
-    eventListener: (event: Event) => void,
+    eventListener: (event: Event) => void
   ): HTMLDivElement {
     const inputId = H5P.createUUID();
     
@@ -110,13 +118,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     fileInputLabel.appendChild(fileInputLabelText);
     fileInputLabel.appendChild(fileInputElement);
 
-    const fileInputValue = document.createElement("div");
-    fileInputValue.id = "csv-to-text-value";
-    fileInputValue.innerHTML += fileInputElement.value;
-    fileInputValue.classList.add("csvtotext-value");
-
     fileInputWrapper.appendChild(fileInputLabel);
-    fileInputWrapper.appendChild(fileInputValue);
 
     return fileInputWrapper;
   }
@@ -135,7 +137,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     return textarea;
   }
 
-  private async insertIntoField(event: Event): Promise<void> {
+  private async insertIntoField(event: Event, fileInputElementValue: HTMLDivElement): Promise<void> {
     const files = Array.from((event.target as HTMLInputElement).files ?? []);
 
     if (!this.textarea) {
@@ -161,8 +163,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);
 
-    const inputValueDiv = document.getElementById("csv-to-text-value") as HTMLDivElement;
-    inputValueDiv.innerHTML = files[0]?.name ?? "";
+    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(', ');
   }
 }
 

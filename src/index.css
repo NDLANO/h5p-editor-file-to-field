@@ -1,0 +1,23 @@
+.h5peditor .file.csvtotext-file {
+  margin-bottom: 12px;
+}
+
+.h5peditor .file.csvtotext-file .add:focus-within {
+  box-shadow: 0 0 16px 0 rgb(133 188 255 / 84%);
+}
+
+.csvtotext-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.csvtotext-value {
+  display: inline-block;
+  margin-left: 12px;
+}

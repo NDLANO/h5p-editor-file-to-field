@@ -161,9 +161,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     this.setValue(this.field, newValue);
 
     const inputValueDiv = document.getElementById("csv-to-text-value") as HTMLDivElement;
-    if (files && files[0]?.name) { 
-      inputValueDiv.innerHTML = files[0].name;
-    };
+    inputValueDiv.innerHTML = files[0]?.name ?? "";
   }
 }
 

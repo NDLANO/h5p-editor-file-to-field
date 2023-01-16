@@ -1,6 +1,7 @@
 import type { H5PFieldText, IH5PWidget } from "h5p-types";
 import { H5P, H5PEditor, H5PWidget, registerWidget } from "h5p-utils";
 import { parseCSV } from "./utils/csv.utils";
+import "./index.css";
 
 const html = String.raw;
 
@@ -26,8 +27,10 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       );
     }
 
+    const fileInputElementValue = CSVToTextWidget.createFileInputValue();
+    
     const fileInputElement = CSVToTextWidget.createFileInput(event =>
-      this.insertIntoField(event),
+      this.insertIntoField(event, fileInputElementValue),
     );
 
     this.textarea = CSVToTextWidget.createTextarea(
@@ -38,6 +41,10 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       },
     );
 
+    const label = H5PEditor.createLabel(field);
+    this.wrapper.innerHTML += label;
+    this.wrapper.classList.add("field", `field-name-${field.name}`);
+
     if (this.field.important) {
       const importantDescription = H5PEditor.createImportantDescription(
         this.field.important,
@@ -45,9 +52,6 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
       this.wrapper.innerHTML += importantDescription;
     }
-
-    const label = H5PEditor.createLabel(field);
-    this.wrapper.innerHTML += label;
 
     const description = field.description
       ? html`<div
@@ -63,6 +67,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     }
 
     this.wrapper.appendChild(fileInputElement);
+    this.wrapper.appendChild(fileInputElementValue);
     this.wrapper.appendChild(this.textarea);
 
     $container.get(0)?.append(this.wrapper);
@@ -80,30 +85,42 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
   remove() {}
 
+  private static createFileInputValue(): HTMLDivElement {
+    const fileInputValue = document.createElement("div");
+    fileInputValue.classList.add("csvtotext-value");
+    return fileInputValue;
+  }
+
   private static createFileInput(
-    eventListener: (event: Event) => void,
-  ): HTMLInputElement {
+    eventListener: (event: Event) => void
+  ): HTMLDivElement {
     const inputId = H5P.createUUID();
+    
+    const fileInputWrapper = document.createElement("div");
+    fileInputWrapper.classList.add("file");
+    fileInputWrapper.classList.add("csvtotext-file");
+
+    const fileInputLabelText = document.createElement("div");
+    fileInputLabelText.classList.add("h5peditor-field-file-upload-text");
+    // TODO: Translate
+    fileInputLabelText.innerHTML += "Import CSV-file";
+
     const fileInputElement = document.createElement("input");
     fileInputElement.id = inputId;
     fileInputElement.type = "file";
     fileInputElement.accept = "text/csv";
     fileInputElement.multiple = true;
     fileInputElement.addEventListener("change", eventListener);
+    fileInputElement.classList.add("csvtotext-input");
 
-    // TODO: Move CSS into a separate CSS file
-    fileInputElement.style.display = "inline-block";
-    fileInputElement.style.cursor = "pointer";
-    fileInputElement.style.padding = "0.5em 1.5em 0.5em 3em";
-    fileInputElement.style.background =
-      "linear-gradient(to bottom, #fbfbfb 0, #f2f2f2 100%)";
-    fileInputElement.style.border = "1px solid #d0d0d1";
-    fileInputElement.style.borderRadius = "0.25em";
-    fileInputElement.style.color = "#222222";
-    fileInputElement.style.fontWeight = "bold";
-    fileInputElement.style.lineHeight = "normal";
+    const fileInputLabel = document.createElement("label");
+    fileInputLabel.classList.add("add");
+    fileInputLabel.appendChild(fileInputLabelText);
+    fileInputLabel.appendChild(fileInputElement);
 
-    return fileInputElement;
+    fileInputWrapper.appendChild(fileInputLabel);
+
+    return fileInputWrapper;
   }
 
   private static createTextarea(
@@ -120,7 +137,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     return textarea;
   }
 
-  private async insertIntoField(event: Event): Promise<void> {
+  private async insertIntoField(event: Event, fileInputElementValue: HTMLDivElement): Promise<void> {
     const files = Array.from((event.target as HTMLInputElement).files ?? []);
 
     if (!this.textarea) {
@@ -145,6 +162,8 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);
+
+    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(', ');
   }
 }
 

@@ -94,6 +94,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     const fileInputLabelText = document.createElement("div");
     fileInputLabelText.classList.add("h5peditor-field-file-upload-text");
+    // TODO: Translate
     fileInputLabelText.innerHTML += "Import CSV-file";
 
     const fileInputElement = document.createElement("input");

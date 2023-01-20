@@ -1,7 +1,8 @@
 import type { H5PFieldText, IH5PWidget } from "h5p-types";
 import { H5P, H5PEditor, H5PWidget, registerWidget } from "h5p-utils";
-import { parseCSV } from "./utils/csv.utils";
+import { t } from "./h5p/h5p.utils";
 import "./index.css";
+import { parseCSV } from "./utils/csv.utils";
 
 const html = String.raw;
 
@@ -28,7 +29,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     }
 
     const fileInputElementValue = CSVToTextWidget.createFileInputValue();
-    
+
     const fileInputElement = CSVToTextWidget.createFileInput(event =>
       this.insertIntoField(event, fileInputElementValue),
     );
@@ -92,18 +93,17 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   }
 
   private static createFileInput(
-    eventListener: (event: Event) => void
+    eventListener: (event: Event) => void,
   ): HTMLDivElement {
     const inputId = H5P.createUUID();
-    
+
     const fileInputWrapper = document.createElement("div");
     fileInputWrapper.classList.add("file");
     fileInputWrapper.classList.add("csvtotext-file");
 
     const fileInputLabelText = document.createElement("div");
     fileInputLabelText.classList.add("h5peditor-field-file-upload-text");
-    // TODO: Translate
-    fileInputLabelText.innerHTML += "Import CSV-file";
+    fileInputLabelText.innerHTML += t("importCSVFileButtonLabel");
 
     const fileInputElement = document.createElement("input");
     fileInputElement.id = inputId;
@@ -137,7 +137,10 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     return textarea;
   }
 
-  private async insertIntoField(event: Event, fileInputElementValue: HTMLDivElement): Promise<void> {
+  private async insertIntoField(
+    event: Event,
+    fileInputElementValue: HTMLDivElement,
+  ): Promise<void> {
     const files = Array.from((event.target as HTMLInputElement).files ?? []);
 
     if (!this.textarea) {
@@ -163,7 +166,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);
 
-    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(', ');
+    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(", ");
   }
 }
 

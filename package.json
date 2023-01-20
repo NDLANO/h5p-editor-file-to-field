@@ -30,7 +30,7 @@
     "prettier": "^2.8.3",
     "prettier-config": "github:boyum/prettier-config",
     "typescript": "^4.9.4",
-    "vite": "^3.0.9",
+    "vite": "^4.0.4",
     "vitest": "^0.27.2"
   },
   "prettier": "prettier-config"

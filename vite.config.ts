@@ -5,16 +5,11 @@ export default defineConfig({
   build: {
     minify: "esbuild",
 
-    rollupOptions: {
-      input: "src/h5p-editor-csv-to-text.ts",
-      output: {
-        file: "dist/h5p-editor-csv-to-text.js",
-        dir: undefined,
-        esModule: false,
-        format: "iife",
-      },
+    lib: {
+      entry: ["src/h5p-editor-csv-to-text.ts"],
+      formats: ["iife"],
+      name: "H5PEditorCsvToText",
+      fileName: () => "h5p-editor-csv-to-text.js",
     },
-
-    target: "es6",
   },
 });

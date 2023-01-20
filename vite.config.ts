@@ -8,7 +8,7 @@ export default defineConfig({
     lib: {
       entry: ["src/h5p-editor-csv-to-text.ts"],
       formats: ["iife"],
-      name: "H5pEditorCsvToText",
+      name: "H5PEditorCsvToText",
       fileName: () => "h5p-editor-csv-to-text.js",
     },
   },

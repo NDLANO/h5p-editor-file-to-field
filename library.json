@@ -9,5 +9,10 @@
     {
       "path": "dist/h5p-editor-csv-to-text.js"
     }
+  ],
+  "preloadedCss": [
+    {
+      "path": "dist/style.css"
+    }
   ]
 }

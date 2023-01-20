@@ -10,8 +10,8 @@ on:
 
 env:
   working-directory: .
-  project-id: h5p-editor-uuid
-  project-name: H5PEditor.UUIDWidget
+  project-id: h5p-editor-csv-to-text
+  project-name: H5PEditor.CSVToText
 
 jobs:
   check-h5p-library-version:

@@ -4,6 +4,8 @@ import { defineConfig } from "vite";
 export default defineConfig({
   build: {
     minify: "esbuild",
+    sourcemap: true,
+    target: "ES2015",
 
     lib: {
       entry: ["src/h5p-editor-csv-to-text.ts"],

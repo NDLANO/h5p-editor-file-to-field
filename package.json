@@ -4,9 +4,10 @@
   "main": "h5p-editor-csv-to-text.js",
   "scripts": {
     "start": "vite build --mode=development --watch --minify=false",
+    "watch": "npm start",
     "build": "tsc --noEmit && vite build",
-    "lint": "prettier .",
-    "lint:fix": "prettier . --write",
+    "lint": "eslint ./src/**/*",
+    "lint:fix": "npm run lint -- --fix",
     "test": "vitest run",
     "test:watch": "vitest"
   },
@@ -26,12 +27,12 @@
   },
   "devDependencies": {
     "@tsconfig/strictest": "^1.0.2",
+    "@typescript-eslint/parser": "^5.49.0",
+    "eslint": "^8.32.0",
+    "eslint-config-ndla-h5p": "github:ndlano/eslint-config-ndla-h5p",
     "h5p-types": "^1.5.0",
-    "prettier": "^2.8.3",
-    "prettier-config": "github:boyum/prettier-config",
     "typescript": "^4.9.4",
     "vite": "^4.0.4",
     "vitest": "^0.28.2"
-  },
-  "prettier": "prettier-config"
+  }
 }

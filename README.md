@@ -14,7 +14,7 @@ The CSV file is parsed and outputted on the format that's consumed by [H5P.Vocab
 Input: `ocean/sea;o___n;sjø;s_ø`
 Output: `'ocean/sea:o___n|sjø:s_ø'`
 
-The CSV parser automatically detects the CSV delimiter and currently supports using either comma (`,`) or semi colon (`;`).
+The CSV parser automatically detects the CSV delimiter and currently supports using either comma (`,`) or semicolon (`;`).
 
 ### Usage
 

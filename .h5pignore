@@ -8,4 +8,3 @@ package-lock.json
 README.md
 vite.config.ts
 tsconfig.json
-docs

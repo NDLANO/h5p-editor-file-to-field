@@ -54,4 +54,5 @@ It is not part of the H5P core, therefore it must be added as an editor dependen
 
 #### Result
 
-![Screenshot of the widget when specified as in the example code above](https://github.com/NDLANO/h5p-editor-csv-to-text/blob/main/docs/assets/screenshot.png)
+![Screenshot of the widget when specified as in the example code above](https://user-images.githubusercontent.com/9085189/216600680-424c1934-2792-4a59-9216-fded55a20d1b.png)
+

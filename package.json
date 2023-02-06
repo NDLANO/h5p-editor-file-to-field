@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@tsconfig/strictest": "^1.0.2",
-    "@typescript-eslint/parser": "^5.49.0",
+    "@typescript-eslint/parser": "^5.51.0",
     "eslint": "^8.32.0",
     "eslint-config-ndla-h5p": "github:ndlano/eslint-config-ndla-h5p",
     "h5p-types": "^1.5.0",

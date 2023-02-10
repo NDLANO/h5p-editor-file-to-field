@@ -1,15 +1,15 @@
-import type { H5PFieldText, IH5PWidget } from "h5p-types";
-import { H5P, H5PEditor, H5PWidget, registerWidget } from "h5p-utils";
-import { t } from "./h5p/h5p.utils";
-import "./index.css";
-import { parseCSV } from "./utils/csv.utils";
+import type { H5PFieldText, IH5PWidget } from 'h5p-types';
+import { H5P, H5PEditor, H5PWidget, registerWidget } from 'h5p-utils';
+import { t } from './h5p/h5p.utils';
+import './index.css';
+import { parseCSV } from './utils/csv.utils';
 
 const html = String.raw;
 
-const widgetName = "csv-to-text";
+const widgetName = 'csv-to-text';
 
-const wordHintSeparator = ":";
-const languageSeparator = "|";
+const wordHintSeparator = ':';
+const languageSeparator = '|';
 
 class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   public $item: JQuery<HTMLElement> | undefined;
@@ -21,7 +21,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   appendTo($container: JQuery<HTMLDivElement>) {
     const { field } = this;
 
-    const isFileField = field.type === "text";
+    const isFileField = field.type === 'text';
     if (!isFileField) {
       console.warn(
         `The field \`${field.name}\` has the widget \`${widgetName}\` set, but is of type \`${field.type}\`, not \`text\``,
@@ -30,21 +30,22 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     const fileInputElementValue = CSVToTextWidget.createFileInputValue();
 
-    const fileInputElement = CSVToTextWidget.createFileInput(event =>
+    const fileInputElement = CSVToTextWidget.createFileInput((event) =>
       this.insertIntoField(event, fileInputElementValue),
     );
 
     this.textarea = CSVToTextWidget.createTextarea(
-      this.params ?? "",
+      this.params ?? '',
       ({ target }) => {
         const { value } = target as HTMLTextAreaElement;
         this.setValue(this.field, value);
+        this.setWordCount();
       },
     );
 
     const label = H5PEditor.createLabel(field);
     this.wrapper.innerHTML += label;
-    this.wrapper.classList.add("field", `field-name-${field.name}`);
+    this.wrapper.classList.add('field', `field-name-${field.name}`);
 
     if (this.field.important) {
       const importantDescription = H5PEditor.createImportantDescription(
@@ -71,11 +72,14 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     this.wrapper.appendChild(fileInputElementValue);
     this.wrapper.appendChild(this.textarea);
 
+    const wordCount = this.getNumberOfRows();
+    this.wrapper.appendChild(CSVToTextWidget.createWordCount(wordCount));
+
     $container.get(0)?.append(this.wrapper);
 
     this.$item = H5PEditor.$(this.wrapper);
     this.$input = H5PEditor.$(this.textarea);
-    this.$errors = this.$item.children(".h5p-errors");
+    this.$errors = this.$item.children('.h5p-errors');
 
     H5PEditor.bindImportantDescriptionEvents(this, field.name, this.parent);
   }
@@ -87,8 +91,8 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   remove() {}
 
   private static createFileInputValue(): HTMLDivElement {
-    const fileInputValue = document.createElement("div");
-    fileInputValue.classList.add("csvtotext-value");
+    const fileInputValue = document.createElement('div');
+    fileInputValue.classList.add('csvtotext-value');
     return fileInputValue;
   }
 
@@ -97,24 +101,24 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   ): HTMLDivElement {
     const inputId = H5P.createUUID();
 
-    const fileInputWrapper = document.createElement("div");
-    fileInputWrapper.classList.add("file");
-    fileInputWrapper.classList.add("csvtotext-file");
+    const fileInputWrapper = document.createElement('div');
+    fileInputWrapper.classList.add('file');
+    fileInputWrapper.classList.add('csvtotext-file');
 
-    const fileInputLabelText = document.createElement("div");
-    fileInputLabelText.classList.add("h5peditor-field-file-upload-text");
-    fileInputLabelText.innerHTML += t("importCSVFileButtonLabel");
+    const fileInputLabelText = document.createElement('div');
+    fileInputLabelText.classList.add('h5peditor-field-file-upload-text');
+    fileInputLabelText.innerHTML += t('importCSVFileButtonLabel');
 
-    const fileInputElement = document.createElement("input");
+    const fileInputElement = document.createElement('input');
     fileInputElement.id = inputId;
-    fileInputElement.type = "file";
-    fileInputElement.accept = "text/csv";
+    fileInputElement.type = 'file';
+    fileInputElement.accept = 'text/csv';
     fileInputElement.multiple = true;
-    fileInputElement.addEventListener("change", eventListener);
-    fileInputElement.classList.add("csvtotext-input");
+    fileInputElement.addEventListener('change', eventListener);
+    fileInputElement.classList.add('csvtotext-input');
 
-    const fileInputLabel = document.createElement("label");
-    fileInputLabel.classList.add("add");
+    const fileInputLabel = document.createElement('label');
+    fileInputLabel.classList.add('add');
     fileInputLabel.appendChild(fileInputLabelText);
     fileInputLabel.appendChild(fileInputElement);
 
@@ -129,12 +133,53 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   ): HTMLTextAreaElement {
     const inputId = H5P.createUUID();
 
-    const textarea = document.createElement("textarea");
+    const textarea = document.createElement('textarea');
     textarea.id = inputId;
     textarea.value = value;
-    textarea.addEventListener("change", eventListener);
+    textarea.addEventListener('input', eventListener);
 
     return textarea;
+  }
+
+  private static getWordCountLabel(count: number): string {
+    const wordCountTranslationKey =
+      count === 1 ? 'wordCount_singular' : 'wordCount_plural';
+
+    return t(wordCountTranslationKey, {
+      ':count': count.toString(),
+    });
+  }
+
+  private static createWordCount(count: number): HTMLDivElement {
+    const wordCount = document.createElement('div');
+    wordCount.classList.add('csvtotext-wordcount');
+    wordCount.innerHTML = CSVToTextWidget.getWordCountLabel(count);
+
+    return wordCount;
+  }
+
+  private setWordCount() {
+    if (!this.textarea) {
+      return;
+    }
+
+    let wordCount = this.wrapper.querySelector('.csvtotext-wordcount');
+    if (!wordCount) {
+      return;
+    }
+
+    const count = this.getNumberOfRows();
+    wordCount.innerHTML = CSVToTextWidget.getWordCountLabel(count);
+  }
+
+  private getNumberOfRows(): number {
+    if (!this.textarea) {
+      return 0;
+    }
+
+    return this.textarea.value
+      .split('\n')
+      .filter((row) => row.trim().length > 0).length;
   }
 
   private async insertIntoField(
@@ -149,24 +194,24 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     const newValue = (
       this.textarea.value +
-      "\n" +
+      '\n' +
       (
         await Promise.all(
-          files.map(async file =>
+          files.map(async (file) =>
             parseCSV(
               await file.text(),
               wordHintSeparator,
               languageSeparator,
-            ).join("\n"),
+            ).join('\n'),
           ),
         )
-      ).join("\n")
+      ).join('\n')
     ).trim();
 
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);
 
-    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(", ");
+    fileInputElementValue.innerHTML = files.map(({ name }) => name).join(', ');
   }
 }
 

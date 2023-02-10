@@ -13,11 +13,15 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 
 .csvtotext-value {
   display: inline-block;
   margin: 9px 12px;
+}
+
+.csvtotext-wordcount {
+  text-align: right;
 }

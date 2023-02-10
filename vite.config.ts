@@ -1,3 +1,4 @@
+import jsonDts from 'unplugin-json-dts/vite';
 import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
@@ -14,4 +15,6 @@ export default defineConfig({
       fileName: () => 'h5p-editor-csv-to-text.js',
     },
   },
+
+  plugins: [jsonDts()],
 });

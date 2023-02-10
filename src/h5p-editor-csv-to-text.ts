@@ -2,7 +2,9 @@ import type { H5PFieldText, IH5PWidget } from 'h5p-types';
 import { H5P, H5PEditor, H5PWidget, registerWidget } from 'h5p-utils';
 import { t } from './h5p/h5p.utils';
 import './index.css';
+import { InvalidRow } from './types/InvalidRow';
 import { parseCSV } from './utils/csv.utils';
+import { getInvalidRows } from './utils/word.utils';
 
 const html = String.raw;
 
@@ -16,6 +18,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   public $input: JQuery<HTMLTextAreaElement> | undefined;
   public $errors: JQuery<HTMLElement> | undefined;
 
+  private hasErrors = false;
   private textarea: HTMLTextAreaElement | undefined;
 
   appendTo($container: JQuery<HTMLDivElement>) {
@@ -38,8 +41,32 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
       this.params ?? '',
       ({ target }) => {
         const { value } = target as HTMLTextAreaElement;
-        this.setValue(this.field, value);
         this.setWordCount();
+
+        const rows = value.split('\n');
+        const invalidRows = getInvalidRows(rows);
+        const hasErrors = invalidRows.length > 0;
+        if (!hasErrors) {
+          this.hideTextareaErrors();
+        }
+      },
+      ({ target }) => {
+        this.hideTextareaErrors();
+
+        const { value } = target as HTMLTextAreaElement;
+        this.setValue(this.field, value);
+
+        const rows = value.split('\n');
+
+        const invalidRows = getInvalidRows(rows);
+        const hasErrors = invalidRows.length > 0;
+        if (hasErrors) {
+          this.showTextareaErrors(invalidRows);
+          this.hasErrors = true;
+        }
+        else {
+          this.hasErrors = false;
+        }
       },
     );
 
@@ -81,11 +108,22 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     this.$input = H5PEditor.$(this.textarea);
     this.$errors = this.$item.children('.h5p-errors');
 
+    if (this.params) {
+      const rows = this.params.split('\n');
+      const invalidRows = getInvalidRows(rows);
+      const hasErrors = invalidRows.length > 0;
+
+      if (hasErrors) {
+        this.showTextareaErrors(invalidRows);
+        this.hasErrors = true;
+      }
+    }
+
     H5PEditor.bindImportantDescriptionEvents(this, field.name, this.parent);
   }
 
   validate() {
-    return true;
+    return this.hasErrors;
   }
 
   remove() {}
@@ -129,14 +167,17 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
   private static createTextarea(
     value: string,
-    eventListener: (event: Event) => void,
+    inputEventListener: (event: Event) => void,
+    changeEventListener: (event: Event) => void,
   ): HTMLTextAreaElement {
     const inputId = H5P.createUUID();
 
     const textarea = document.createElement('textarea');
     textarea.id = inputId;
     textarea.value = value;
-    textarea.addEventListener('input', eventListener);
+
+    textarea.addEventListener('input', inputEventListener);
+    textarea.addEventListener('change', changeEventListener);
 
     return textarea;
   }
@@ -180,6 +221,34 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     return this.textarea.value
       .split('\n')
       .filter((row) => row.trim().length > 0).length;
+  }
+
+  private hideTextareaErrors() {
+    this.wrapper.querySelector('.csvtotext-textarea-errors-wrapper')?.remove();
+  }
+
+  private showTextareaErrors(invalidRows: Array<InvalidRow>) {
+    if (!this.textarea || !this.$errors) {
+      return;
+    }
+
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('csvtotext-textarea-errors-wrapper');
+
+    const errorTitle = document.createTextNode(t('textareaErrorsTitle'));
+    wrapper.appendChild(errorTitle);
+
+    const errorList = document.createElement('ul');
+
+    invalidRows.forEach(({ row, index }) => {
+      const error = document.createElement('li');
+      error.innerHTML = `${index}: ${row}`;
+
+      errorList.appendChild(error);
+    });
+
+    wrapper.appendChild(errorList);
+    this.wrapper.appendChild(wrapper);
   }
 
   private async insertIntoField(

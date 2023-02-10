@@ -1,10 +1,27 @@
 import { H5PEditor } from 'h5p-utils';
-import type { libraryStrings } from '../../language/en.json';
+import { libraryStrings } from '../../language/en.json';
 import library from '../../library.json';
 
-export const t: (
-  key: keyof typeof libraryStrings,
-  vars?: Record<string, string> | undefined,
+type TranslationHasParams<TTranslation extends string> =
+  TTranslation extends `${string}:${string}` ? true : false;
+
+type TranslationParams<TTranslation extends string> =
+  TTranslation extends `:${infer THead} ${infer TTail}`
+    ? Record<`:${THead}`, string> & TranslationParams<TTail>
+    : TTranslation extends `:${infer THead}`
+    ? Record<`:${THead}`, string>
+    : {};
+
+type Translations = typeof libraryStrings;
+
+type TranslationKey = keyof Translations;
+type Translation<T extends TranslationKey> = Translations[T];
+
+export const t: <T extends TranslationKey>(
+  key: T,
+  vars?: TranslationHasParams<Translation<T>> extends true
+    ? TranslationParams<Translation<T>>
+    : undefined,
 ) => string = H5PEditor.t.bind(
   null,
   library.machineName as `H5PEditor.${string}`,

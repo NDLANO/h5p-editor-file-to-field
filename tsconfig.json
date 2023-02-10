@@ -14,7 +14,8 @@
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "importsNotUsedAsValues":"preserve"
   },
   "include": ["src/**/*.ts"],
   "extends": "@tsconfig/strictest/tsconfig.json"

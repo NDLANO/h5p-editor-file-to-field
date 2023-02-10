@@ -2,25 +2,21 @@ import { InvalidRow } from '../types/InvalidRow';
 import { isNil } from './type.utils';
 
 /**
- * Validates that each row is on the format "word,hint:word,hint".
+ * Validates that each row is on the format "word:hint,word:hint".
  *
  * @return true if valid, false otherwise.
  */
 const validateRow = (row: string): boolean => {
-  const [sourcePart, targetPart] = row.split(':');
+  const [sourcePart, targetPart] = row.split(',');
 
   if (!sourcePart || !targetPart) {
     return false;
   }
 
-  const [sourceWord, sourceHint] = sourcePart.split(',');
-  const [targetWord] = targetPart.split(',');
+  const [sourceWord, sourceHint] = sourcePart.split(':');
+  const [targetWord] = targetPart.split(':');
 
-  if (
-    isNil(sourceWord) ||
-    isNil(sourceHint) ||
-    isNil(targetWord)
-  ) {
+  if (isNil(sourceWord) || isNil(sourceHint) || isNil(targetWord)) {
     return false;
   }
 

@@ -1,16 +1,7 @@
+import type { TranslationHasParams, TranslationParams } from 'h5p-types';
 import { H5PEditor } from 'h5p-utils';
 import { libraryStrings } from '../../language/en.json';
 import library from '../../library.json';
-
-type TranslationHasParams<TTranslation extends string> =
-  TTranslation extends `${string}:${string}` ? true : false;
-
-type TranslationParams<TTranslation extends string> =
-  TTranslation extends `:${infer THead} ${infer TTail}`
-    ? Record<`:${THead}`, string> & TranslationParams<TTail>
-    : TTranslation extends `:${infer THead}`
-    ? Record<`:${THead}`, string>
-    : {};
 
 type Translations = typeof libraryStrings;
 

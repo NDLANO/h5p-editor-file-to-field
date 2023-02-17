@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import type { Delimiter } from '../types/delimiter';
 import {
   findDelimiter,

@@ -6,5 +6,9 @@ src
 package.json
 package-lock.json
 README.md
-vite.config.ts
+webpack.config.js
 tsconfig.json
+.eslintignore
+.eslintrc.json
+library.json.d.ts
+jest.config.js

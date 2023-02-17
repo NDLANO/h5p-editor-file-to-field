@@ -1,4 +1,5 @@
 {
   "extends": ["eslint-config-ndla-h5p"],
-  "parser": "@typescript-eslint/parser"
+  "parser": "@typescript-eslint/parser",
+  "ignorePatterns": ["node_modules/", "dist/", "*.json.d.ts"]
 }

@@ -1,5 +1,5 @@
 import { H5PEditor } from 'h5p-utils';
-import { libraryStrings } from '../../language/en.json';
+import enTranslation from '../../language/en.json';
 import library from '../../library.json';
 
 type TranslationHasParams<TTranslation extends string> =
@@ -12,7 +12,7 @@ type TranslationParams<TTranslation extends string> =
     ? Record<`:${THead}`, string>
     : {};
 
-type Translations = typeof libraryStrings;
+type Translations = typeof enTranslation.libraryStrings;
 
 type TranslationKey = keyof Translations;
 type Translation<T extends TranslationKey> = Translations[T];

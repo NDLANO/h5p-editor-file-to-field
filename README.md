@@ -12,7 +12,7 @@ It will render a button that lets the user upload a CSV file and a textarea that
 The CSV file is parsed and outputted on the format that's consumed by [H5P.VocabularyDrill](https://github.com/NDLANO/h5p-vocabulary-drill).
 
 Input: `ocean/sea;o___n;sjø;s_ø`
-Output: `'ocean/sea:o___n|sjø:s_ø'`
+Output: `'ocean/sea:o___n,sjø:s_ø'`
 
 The CSV parser automatically detects the CSV delimiter and currently supports using either comma (`,`) or semicolon (`;`).
 

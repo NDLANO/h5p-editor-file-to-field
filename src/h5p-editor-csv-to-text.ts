@@ -9,7 +9,7 @@ const html = String.raw;
 const widgetName = 'csv-to-text';
 
 const wordHintSeparator = ':';
-const languageSeparator = '|';
+const languageSeparator = ',';
 
 class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
   public $item: JQuery<HTMLElement> | undefined;

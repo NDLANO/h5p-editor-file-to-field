@@ -83,11 +83,11 @@ describe('CSV utils', () => {
   describe(parseCSV.name, () => {
     it('should parse a CSV and output the cells separated by the designated separators', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = 'ocean/sea;o___n;sjø;s_ø';
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -95,12 +95,12 @@ describe('CSV utils', () => {
 
     it('should handle header rows', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = `;;;
 ocean/sea;o___n;sjø;s_ø`;
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -108,11 +108,11 @@ ocean/sea;o___n;sjø;s_ø`;
 
     it('should handle header columns', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = ';ocean/sea;o___n;sjø;s_ø';
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -120,12 +120,12 @@ ocean/sea;o___n;sjø;s_ø`;
 
     it('should handle rows with missing cells', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = `ocean/sea;o___n;sjø;s_ø
 fire;f__e;ild✨;`;
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø', 'fire:f__e|ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -133,12 +133,12 @@ fire;f__e;ild✨;`;
 
     it('should handle comma as separator', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = `ocean/sea,o___n,sjø,s_ø
 fire,f__e,ild✨,`;
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø', 'fire:f__e|ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -146,14 +146,14 @@ fire,f__e,ild✨,`;
 
     it('should handle complex examples', () => {
       const wordHintSeparator = ':';
-      const languageSeparator = '|';
+      const languageSeparator = ',';
 
       const csv = `;;;;;;
 ;ocean/sea;o___n;sjø;s_ø;;
 ;fire;f__e;ild✨;;;
 `;
 
-      const expected = ['ocean/sea:o___n|sjø:s_ø', 'fire:f__e|ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);

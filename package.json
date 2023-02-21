@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/NDLANO/h5p-editor-csv-to-text#readme",
   "dependencies": {
-    "h5p-utils": "^3.1.0"
+    "h5p-utils": "^3.2.0"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.20.2",

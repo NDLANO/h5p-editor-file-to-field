@@ -136,6 +136,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
     const textarea = document.createElement('textarea');
     textarea.id = inputId;
     textarea.value = value;
+    textarea.rows = 8;
     textarea.addEventListener('input', eventListener);
 
     return textarea;

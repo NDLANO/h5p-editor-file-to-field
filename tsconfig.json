@@ -8,15 +8,13 @@
     "strict": true,
     "sourceMap": true,
     "esModuleInterop": true,
-    "noEmit": false,
+    "noEmit": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "importsNotUsedAsValues":"preserve"
   },
-  "include": ["src/**/*.ts"],
-  "extends": "@tsconfig/strictest/tsconfig.json"
+  "include": ["src/**/*.ts"]
 }

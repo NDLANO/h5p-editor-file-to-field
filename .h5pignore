@@ -13,3 +13,4 @@ tsconfig.json
 library.json.d.ts
 jest.config.js
 LICENSE
+language/en.json.d.ts

@@ -75,6 +75,14 @@ export const parseCSV = (
         const [sourceWord, sourceHint, targetWord, targetHint] =
           row.split(delimiter);
 
+        if (sourceWord && sourceHint && !targetWord && !targetHint) {
+          /*
+           * There are just two columns in this row, so interpret source hint as
+           * target word.
+           */
+          return `${sourceWord}${languageSeparator}${sourceHint}`;
+        }
+
         return (
           sourceWord +
           wordHintSeparator +

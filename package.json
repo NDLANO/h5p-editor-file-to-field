@@ -16,8 +16,8 @@
     "url": "git+https://github.com/NDLANO/h5p-editor-csv-to-text.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "NDLA",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/NDLANO/h5p-editor-csv-to-text/issues"
   },

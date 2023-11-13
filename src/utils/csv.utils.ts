@@ -83,15 +83,10 @@ export const parseCSV = (
           return `${sourceWord}${languageSeparator}${sourceHint}`;
         }
 
-        return (
-          sourceWord +
-          wordHintSeparator +
-          sourceHint +
-          languageSeparator +
-          targetWord +
-          wordHintSeparator +
-          targetHint
-        );
+        const source = `${sourceWord}${wordHintSeparator}${sourceHint}`;
+        const target = `${targetWord}${wordHintSeparator}${targetHint}`;
+
+        return `${source}${languageSeparator}${target}`;
       }
       catch {
         // If we could not extract all four items from the row, it might be misshapen.

@@ -3,7 +3,7 @@ declare const json: {
   "machineName": "H5PEditor.CSVToText",
   "majorVersion": 1,
   "minorVersion": 0,
-  "patchVersion": 14,
+  "patchVersion": 15,
   "runnable": 0,
   "preloadedJs": [
     {

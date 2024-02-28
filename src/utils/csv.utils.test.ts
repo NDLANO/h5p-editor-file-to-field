@@ -125,7 +125,7 @@ ocean/sea;o___n;sjø;s_ø`;
       const csv = `ocean/sea;o___n;sjø;s_ø
 fire;f__e;ild✨;`;
 
-      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -138,7 +138,7 @@ fire;f__e;ild✨;`;
       const csv = `ocean/sea,o___n,sjø,s_ø
 fire,f__e,ild✨,`;
 
-      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);
@@ -153,7 +153,7 @@ fire,f__e,ild✨,`;
 ;fire;f__e;ild✨;;;
 `;
 
-      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨:'];
+      const expected = ['ocean/sea:o___n,sjø:s_ø', 'fire:f__e,ild✨'];
       const actual = parseCSV(csv, wordHintSeparator, languageSeparator);
 
       expect(actual).toStrictEqual(expected);

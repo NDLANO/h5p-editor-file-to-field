@@ -83,8 +83,12 @@ export const parseCSV = (
           return `${sourceWord}${languageSeparator}${sourceHint}`;
         }
 
-        const source = `${sourceWord}${wordHintSeparator}${sourceHint}`;
-        const target = `${targetWord}${wordHintSeparator}${targetHint}`;
+        const source = sourceHint ?
+          `${sourceWord}${wordHintSeparator}${sourceHint}` :
+          sourceWord;
+        const target = targetHint ?
+          `${targetWord}${wordHintSeparator}${targetHint}` :
+          targetWord;
 
         return `${source}${languageSeparator}${target}`;
       }

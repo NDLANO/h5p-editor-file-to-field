@@ -104,8 +104,7 @@ export const parseCSV = (
 
   const hasErrors = rowsWithErrors.length > 0;
   if (hasErrors) {
-    alert(`The following rows had errors:
-
+    console.warn(`The following rows had errors:
       ${rowsWithErrors.join('\n')}`);
   }
 

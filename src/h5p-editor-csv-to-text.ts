@@ -211,6 +211,7 @@ class CSVToTextWidget extends H5PWidget<H5PFieldText> implements IH5PWidget {
 
     this.textarea.value = newValue;
     this.setValue(this.field, newValue);
+    this.setWordCount();
 
     fileInputElementValue.innerHTML = files.map(({ name }) => name).join(', ');
   }

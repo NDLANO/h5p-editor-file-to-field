@@ -1,6 +1,6 @@
 {
   "name": "h5p-editor-csv-to-text",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "main": "h5p-editor-csv-to-text.js",
   "scripts": {
     "start": "webpack --watch --mode=development",
